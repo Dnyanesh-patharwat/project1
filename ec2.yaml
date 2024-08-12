@@ -1,9 +1,28 @@
----
-AWSTemplateFormatVersion: 2010-09-09
-Description: create ec2 instance
-
 Resources:
-  WebAppInstance:
-    Type: AWS::EC2::Instance
+  MyS3Bucket1:
+    Type: AWS::S3::Bucket
     Properties:
-      ImageId: ami-0d5eff06f840b45e9 # ImageID valid only in us-east-1 region
+      BucketName: group6-output-data # Replace with a globally unique name
+
+  InputDataFile:
+    Type: AWS::S3::Object
+    Properties:
+      Bucket: !Ref MyS3Bucket1
+      Key: "inputdata/"
+
+  ScriptFile:
+    Type: AWS::S3::Object
+    Properties:
+      Bucket: !Ref MyS3Bucket1
+      Key: "script/"
+
+  TempFile:
+    Type: AWS::S3::Object
+    Properties:
+      Bucket: !Ref MyS3Bucket1
+      Key: "temp/"
+
+Outputs:
+  S3BucketName:
+    Description: "Name of the S3 bucket"
+    Value: !Ref MyS3Bucket1
