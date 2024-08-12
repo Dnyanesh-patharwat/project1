@@ -29,11 +29,19 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
 
+      - name: Wait for CloudFormation Stack Completion
+        run: aws cloudformation wait stack-create-complete --stack-name ec2-example
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+
       - name: Create S3 Directories
         run: |
-          aws s3api put-object --bucket group61-output-data --key inputdata/
-          aws s3api put-object --bucket group61-output-data --key script/
-          aws s3api put-object --bucket group61-output-data --key temp/
+          aws s3api put-object --bucket group6-output-data --key inputdata/
+          aws s3api put-object --bucket group6-output-data --key script/
+          aws s3api put-object --bucket group6-output-data --key temp/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
