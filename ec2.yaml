@@ -2,27 +2,4 @@ Resources:
   MyS3Bucket1:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: group6-output-data # Replace with a globally unique name
-
-  InputDataFile:
-    Type: AWS::S3::Object
-    Properties:
-      Bucket: !Ref MyS3Bucket1
-      Key: "inputdata/"
-
-  ScriptFile:
-    Type: AWS::S3::Object
-    Properties:
-      Bucket: !Ref MyS3Bucket1
-      Key: "script/"
-
-  TempFile:
-    Type: AWS::S3::Object
-    Properties:
-      Bucket: !Ref MyS3Bucket1
-      Key: "temp/"
-
-Outputs:
-  S3BucketName:
-    Description: "Name of the S3 bucket"
-    Value: !Ref MyS3Bucket1
+      BucketName: group61-output-data # Replace with a globally unique name
