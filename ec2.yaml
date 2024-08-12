@@ -2,4 +2,15 @@ Resources:
   MyS3Bucket1:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: group61-output-data # Replace with a globally unique name
+      BucketName: group6-source-data-bucket # Name of bucket
+      Tags:
+        - Key: Description
+          Value: "This bucket stores raw data from multiple sources."
+
+  MyS3Bucket2:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: group6-final-result-bucket # Name of bucket
+      Tags:
+        - Key: Description
+          Value: "This bucket stores processed data after ETL operations."
