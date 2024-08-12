@@ -29,7 +29,18 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
       
-      
+      - name: Wait for Stack Creation/Update
+        run: |
+          until [ "$(aws cloudformation describe-stacks --stack-name s3-bucket --query 'Stacks[0].StackStatus' --output text --region us-east-1)" = "CREATE_COMPLETE" ] || [ "$(aws cloudformation describe-stacks --stack-name s3-bucket --query 'Stacks[0].StackStatus' --output text --region us-east-1)" = "UPDATE_COMPLETE" ]; do
+            echo "Waiting for stack creation/update to complete..."
+            sleep 30
+          done
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}   
+          
       - name: Fetch CloudFormation Events
         if: failure()  # This step runs only if the previous step fails
         run: |
@@ -37,8 +48,21 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
+   
+      - name: Wait for S3 Bucket Creation
+        run: |
+          until aws s3api head-bucket --bucket group6-source-data-bucket --region us-east-1; do
+            echo "Waiting for S3 bucket creation..."
+            sleep 30
+          done
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          
       - name: Upload script to S3
         run: |
           aws s3 cp transform_script.py s3://group6-source-data-bucket/script/
